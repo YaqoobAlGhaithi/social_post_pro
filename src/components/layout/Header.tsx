@@ -1,55 +1,81 @@
-import { Sparkle, Sparkles, MessageSquare } from "lucide-react";
+import { motion } from 'framer-motion';
+import { LogOut, User } from 'lucide-react';
 
 interface HeaderProps {
   activeModule: 'improver' | 'support';
   setActiveModule: (module: 'improver' | 'support') => void;
+  user?: any;
+  onLogout?: () => void;
 }
 
-export const Header = ({ activeModule, setActiveModule }: HeaderProps) => {
+export function Header({ activeModule, setActiveModule, user, onLogout }: HeaderProps) {
   return (
-    <>
-      <div className="h-2 bg-gradient-to-r from-[#00FF66] via-orange-500 to-[#00fc60]" />
-      <header className="max-w-6xl mx-auto w-full px-4 pt-8 pb-4 flex flex-col md:flex-row justify-between items-center gap-4">
-        <div className="flex items-center gap-3">
-          <div className="w-12 h-12 bg-black border-2 border-black flex items-center justify-center shadow-[3px_3px_0px_#00FF66] shrink-0">
-            <Sparkle className="w-7 h-7 text-[#00FF66]" />
+    <motion.header
+      className="bg-white shadow-md sticky top-0 z-50"
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      transition={{ duration: 0.5 }}
+      dir="rtl"
+    >
+      <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+        {/* Logo */}
+        <motion.div className="flex items-center gap-2" whileHover={{ scale: 1.05 }}>
+          <div className="w-10 h-10 bg-gradient-to-br from-[#00FF66] to-[#00CC52] rounded-lg flex items-center justify-center">
+            <span className="text-lg font-bold text-black">📱</span>
           </div>
-          <div>
-            <h1 className="text-3xl font-black tracking-tight font-display flex items-center gap-2">
-              POST <span className="text-[#00FF66] text-stroke">PRO</span>
-            </h1>
-            <p className="text-xs font-bold text-gray-600 mt-0.5">
-              النسخة الاحترافية: تحسين، ترجمة، وتوليد صور بذكاء اصطناعي فائق.
-            </p>
-          </div>
-        </div>
+          <h1 className="text-2xl font-bold text-[#1a1a1a] hidden sm:block">Social Post Pro</h1>
+        </motion.div>
 
-        <div className="flex gap-2 p-1 bg-white border-2 border-black shadow-[3px_3px_0px_rgba(0,0,0,1)] rounded-xl shrink-0">
-          <button
+        {/* Navigation */}
+        <div className="flex items-center gap-4">
+          <motion.button
             onClick={() => setActiveModule('improver')}
-            className={`px-4 py-2 text-xs font-bold transition-all rounded-lg flex items-center gap-1.5 ${
+            className={`px-4 py-2 rounded-lg font-semibold transition-all ${
               activeModule === 'improver'
-                ? 'bg-[#00FF66] text-black border-2 border-black shadow-[1.5px_1.5px_0px_rgba(0,0,0,1)]'
-                : 'text-gray-600 hover:text-black hover:bg-gray-100'
+                ? 'bg-[#00FF66] text-black shadow-lg'
+                : 'text-[#666] hover:text-[#1a1a1a]'
             }`}
+            whileHover={{ scale: 1.05 }}
           >
-            <Sparkles className="w-4 h-4" />
-            <span>تحسين المنشورات ✨</span>
-          </button>
-          
-          <button
+            تحسين المنشورات
+          </motion.button>
+
+          <motion.button
             onClick={() => setActiveModule('support')}
-            className={`px-4 py-2 text-xs font-bold transition-all rounded-lg flex items-center gap-1.5 ${
+            className={`px-4 py-2 rounded-lg font-semibold transition-all ${
               activeModule === 'support'
-                ? 'bg-orange-400 text-black border-2 border-black shadow-[1.5px_1.5px_0px_rgba(0,0,0,1)]'
-                : 'text-gray-600 hover:text-black hover:bg-gray-100'
+                ? 'bg-[#00FF66] text-black shadow-lg'
+                : 'text-[#666] hover:text-[#1a1a1a]'
             }`}
+            whileHover={{ scale: 1.05 }}
           >
-            <MessageSquare className="w-4 h-4" />
-            <span>الدعم ومساعدة المطور 💬</span>
-          </button>
+            الدعم
+          </motion.button>
+
+          {/* User Info */}
+          {user && (
+            <motion.div
+              className="flex items-center gap-3 border-r border-[#e5e7eb] pr-4"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.2 }}
+            >
+              <div className="flex items-center gap-2">
+                <User className="w-5 h-5 text-[#00FF66]" />
+                <span className="text-sm font-medium text-[#666] hidden sm:block">{user.name}</span>
+              </div>
+              <motion.button
+                onClick={onLogout}
+                className="p-2 hover:bg-red-50 rounded-lg text-red-500 transition-colors"
+                whileHover={{ scale: 1.1 }}
+                title="تسجيل الخروج"
+              >
+                <LogOut className="w-5 h-5" />
+              </motion.button>
+            </motion.div>
+          )}
         </div>
-      </header>
-    </>
+      </div>
+    </motion.header>
   );
-};
+}
