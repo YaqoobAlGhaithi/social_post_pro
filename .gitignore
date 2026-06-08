@@ -1,8 +1,34 @@
+# Dependencies
 node_modules/
-build/
+package-lock.json
+yarn.lock
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+.env.production.local
+
+# Build
 dist/
-coverage/
+build/
+*.apk
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
 .DS_Store
+
+# Logs
 *.log
-.env*
-!.env.example
+npm-debug.log*
+yarn-debug.log*
+
+# Android Build
+android/.gradle
+android/build/
+android/app/build/
+android/local.properties
