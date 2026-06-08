@@ -1,0 +1,6 @@
+{
+  "name": "Social Media Post Improver",
+  "description": "أداة ذكية لتحسين منشوراتك على وسائل التواصل الاجتماعي باستخدام الذكاء الاصطناعي.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
