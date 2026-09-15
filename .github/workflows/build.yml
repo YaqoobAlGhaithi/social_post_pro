@@ -1,58 +1,23 @@
 name: Build APK
-
-on:
-  push:
-    branches: [main]
-  workflow_dispatch:
-
+on: push
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-          cache: 'npm'
-
-      - name: Setup Java 21
-        uses: actions/setup-java@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
         with:
           java-version: '21'
           distribution: 'temurin'
-
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
-
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v3
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build web (Vite)
-        env:
-          VITE_BACKEND_URL: ${{ secrets.VITE_BACKEND_URL }}
-          VITE_APP_NAME: "Social Post Pro"
-          VITE_APP_VERSION: "1.0.0"
-        run: npm run build
-
-      - name: Sync Capacitor
-        run: npx cap sync android
-
-      - name: Build Debug APK
-        working-directory: android
-        run: |
-          chmod +x gradlew
-          ./gradlew assembleDebug --no-daemon
-
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
+      - uses: actions/setup-node@v4
         with:
-          name: app-debug-${{ github.sha }}
+          node-version: '22'
+      - uses: gradle/actions/setup-gradle@v3
+      - run: npm install
+      - run: npm run build
+      - run: npx cap sync android
+      - run: cd android && chmod +x gradlew && ./gradlew assembleDebug
+      - uses: actions/upload-artifact@v4
+        with:
+          name: app-debug
           path: android/app/build/outputs/apk/debug/app-debug.apk
-          retention-days: 30
